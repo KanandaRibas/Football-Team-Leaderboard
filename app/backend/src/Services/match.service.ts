@@ -20,5 +20,24 @@ class MatchService {
       return match.inProgress === false;
     });
   }
+
+  public async finish(id: string) {
+    const match = await this.matchModel.findOne({ where: { id } });
+    if (match) {
+      match.inProgress = false;
+      await match.save();
+    }
+    return match;
+  }
+
+  public async updateMatch(id: string, homeTeamGoals: string, awayTeamGoals: string) {
+    const match = await this.matchModel.findOne({ where: { id } });
+    if (match) {
+      match.homeTeamGoals = +homeTeamGoals;
+      match.awayTeamGoals = +awayTeamGoals;
+      await match.save();
+    }
+    return match;
+  }
 }
 export default MatchService;
