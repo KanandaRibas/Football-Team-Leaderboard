@@ -1,4 +1,5 @@
 import { ErrorRequestHandler } from 'express';
+// import 'express-async-errors';
 
 const errorMiddleware: ErrorRequestHandler = (err, _req, res, _next) => {
   if (err.statusCode) {

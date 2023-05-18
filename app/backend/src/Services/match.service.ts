@@ -1,9 +1,11 @@
 import Team from '../database/models/TeamModel';
 import Match from '../database/models/MatchModel';
 import { IMatch } from '../Interfaces/IMatch';
+import UnprocessableError from '../errors/unprocessableError';
+import NotFoundError from '../errors/notFoundError';
 
 class MatchService {
-  constructor(private matchModel = Match) { }
+  constructor(private matchModel = Match, private teamModel = Team) { }
 
   public async getAll() {
     const matches = await this.matchModel.findAll({ include: [
@@ -38,6 +40,32 @@ class MatchService {
       await match.save();
     }
     return match;
+  }
+
+  public async validateMatch(homeTeamId: number, awayTeamId: number) {
+    const verifyHomeTeam = await this.teamModel.findOne({ where: { id: homeTeamId } });
+    const verifyAwayTeam = await this.teamModel.findOne({ where: { id: awayTeamId } });
+    if (awayTeamId === homeTeamId) {
+      throw new UnprocessableError(
+        'It is not possible to create a match with two equal teams',
+      );
+    }
+    if (!verifyAwayTeam || !verifyHomeTeam) {
+      throw new NotFoundError('There is no team with such id!');
+    }
+    return true;
+  }
+
+  public async create(newMatch: IMatch) {
+    const { homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals } = newMatch;
+    const inProgress = true;
+    const validate = await this.validateMatch(homeTeamId, awayTeamId);
+    if (validate) {
+      const match = await this.matchModel.create({
+        homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals, inProgress });
+      return match;
+    }
+    return null;
   }
 }
 export default MatchService;
