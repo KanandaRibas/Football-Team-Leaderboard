@@ -1,4 +1,4 @@
-import { ILeaderboard } from '../Interfaces/ILeaderboard';
+import { ILeaderboard, keyTypes } from '../Interfaces/ILeaderboard';
 import { IMatch } from '../Interfaces/IMatch';
 import MatchService from './match.service';
 
@@ -12,7 +12,25 @@ class LeaderboardService {
     return matches;
   }
 
-  public async leaderboard() {
+  public static sortTeams(array: ILeaderboard[], keys: keyTypes[], next: keyTypes): ILeaderboard[] {
+    return array.sort((a: ILeaderboard, b: ILeaderboard) => {
+      if (keys.every((key) => b[key] === a[key])) return b[next] - a[next];
+      return 0;
+    });
+  }
+
+  public async sortLeaderboard(): Promise<ILeaderboard[]> {
+    const array = await this.leaderboard();
+    const sort1 = array.sort((a, b) => b.totalPoints - a.totalPoints);
+    const sort2 = LeaderboardService.sortTeams(sort1, ['totalPoints'], 'totalVictories');
+    const sort3 = LeaderboardService
+      .sortTeams(sort2, ['totalPoints', 'totalVictories'], 'goalsBalance');
+    const sort4 = LeaderboardService
+      .sortTeams(sort3, ['totalPoints', 'totalVictories', 'goalsBalance'], 'goalsFavor');
+    return sort4;
+  }
+
+  public async leaderboard(): Promise<ILeaderboard[]> {
     const matches = await this.finishedMatches();
     const filteredTeams = LeaderboardService.filterDuplicated(matches);
     const columns = filteredTeams.map((id) => ({
@@ -37,8 +55,8 @@ class LeaderboardService {
   }
 
   public static findTeamName(matches: IMatch[], id: number) {
-    const matche = matches.find((match) => match.homeTeamId === id);
-    if (matche) return matche.homeTeam.teamName;
+    const matchById = matches.find((match) => match.homeTeamId === id);
+    if (matchById) return matchById.homeTeam.teamName;
   }
 
   public static totalPoints(maches: IMatch[], id: number) {
