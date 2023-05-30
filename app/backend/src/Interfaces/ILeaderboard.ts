@@ -10,5 +10,3 @@ export interface ILeaderboard {
   goalsBalance: number;
   efficiency: string;
 }
-
-export type keyTypes = 'totalPoints' | 'totalVictories' | 'goalsBalance' | 'goalsFavor';
