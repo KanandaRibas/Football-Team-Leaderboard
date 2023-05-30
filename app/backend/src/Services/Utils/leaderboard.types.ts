@@ -1,14 +1,14 @@
 export type teamTypes = {
   homeOrAwayId: teamTypesId,
-  goals: teamTypesGoals,
-  oppositingTeam: teamTypesGoals,
   homeOrAwayteam: team;
+  goals: teamTypesGoals,
+  oppositingTeamGoals: teamTypesGoals,
 };
-
-export type keyTypes = 'totalPoints' | 'totalVictories' | 'goalsBalance' | 'goalsFavor';
 
 export type teamTypesId = 'homeTeamId' | 'awayTeamId';
 
+export type team = 'homeTeam' | 'awayTeam';
+
 export type teamTypesGoals = 'homeTeamGoals' | 'awayTeamGoals';
 
-export type team = 'homeTeam' | 'awayTeam';
+export type keyTypes = 'totalPoints' | 'totalVictories' | 'goalsBalance' | 'goalsFavor';

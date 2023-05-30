@@ -17,7 +17,6 @@ class LeaderboardService {
 
   public async sortLeaderboard(path: string): Promise<ILeaderboard[]> {
     const array = await this.leaderboard(path);
-    console.log(path);
     const sort1 = array.sort((a, b) => b.totalPoints - a.totalPoints);
     const sort2 = LeaderboardService.sortTeams(sort1, ['totalPoints'], 'totalVictories');
     const sort3 = LeaderboardService
@@ -31,14 +30,14 @@ class LeaderboardService {
     let homeOrAway: teamTypes = {
       homeOrAwayId: 'homeTeamId',
       goals: 'homeTeamGoals',
-      oppositingTeam: 'awayTeamGoals',
+      oppositingTeamGoals: 'awayTeamGoals',
       homeOrAwayteam: 'homeTeam',
     };
     if (path === '/away') {
       homeOrAway = {
         homeOrAwayId: 'awayTeamId',
         goals: 'awayTeamGoals',
-        oppositingTeam: 'homeTeamGoals',
+        oppositingTeamGoals: 'homeTeamGoals',
         homeOrAwayteam: 'awayTeam',
       };
     }
@@ -93,31 +92,31 @@ class LeaderboardService {
   }
 
   public static totalVictories(matches: IMatch[], id: number, path: string) {
-    const { homeOrAwayId, goals, oppositingTeam } = this.verifyPath(path);
+    const { homeOrAwayId, goals, oppositingTeamGoals } = this.verifyPath(path);
     return matches.reduce((acc: number, match) => {
       let total = acc;
       if (match[homeOrAwayId] === id
-        && match[goals] > match[oppositingTeam]) total += 1;
+        && match[goals] > match[oppositingTeamGoals]) total += 1;
       return total;
     }, 0);
   }
 
   public static totalLosses(matches: IMatch[], id: number, path: string) {
-    const { homeOrAwayId, goals, oppositingTeam } = this.verifyPath(path);
+    const { homeOrAwayId, goals, oppositingTeamGoals } = this.verifyPath(path);
     return matches.reduce((acc: number, match) => {
       let total = acc;
       if (match[homeOrAwayId] === id
-        && match[goals] < match[oppositingTeam]) total += 1;
+        && match[goals] < match[oppositingTeamGoals]) total += 1;
       return total;
     }, 0);
   }
 
   public static totalDraws(matches: IMatch[], id: number, path: string) {
-    const { homeOrAwayId, goals, oppositingTeam } = this.verifyPath(path);
+    const { homeOrAwayId, goals, oppositingTeamGoals } = this.verifyPath(path);
     return matches.reduce((acc: number, match) => {
       let total = acc;
       if (match[homeOrAwayId] === id
-        && match[goals] === match[oppositingTeam]) total += 1;
+        && match[goals] === match[oppositingTeamGoals]) total += 1;
       return total;
     }, 0);
   }
@@ -133,10 +132,10 @@ class LeaderboardService {
   }
 
   public static goalsOwn(matches: IMatch[], id: number, path: string) {
-    const { homeOrAwayId, oppositingTeam } = this.verifyPath(path);
+    const { homeOrAwayId, oppositingTeamGoals } = this.verifyPath(path);
     return matches.reduce((acc: number, match) => {
       if (match[homeOrAwayId] === id) {
-        return match[oppositingTeam] + acc;
+        return match[oppositingTeamGoals] + acc;
       }
       return acc;
     }, 0);
