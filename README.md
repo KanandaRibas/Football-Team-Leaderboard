@@ -1,4 +1,4 @@
-# Boas vindas ao repositório do Football Team Leaderboard!
+# Boas vindas ao repositório Football Team Leaderboard!
 
 O Football Team Leaderboard é um site informativo sobre partidas de futebol e classificações de times em um campeonato ! ⚽️<br/>
 Para este projeto foi desenvolvida uma API (utilizando o método TDD) e também foram integradas as aplicações, através do docker-compose, para que elas funcionem consumindo um banco de dados.
@@ -11,7 +11,7 @@ A modelagem dos dados foi feita através do [Sequelize](https://sequelize.org), 
 </details>
 <details>
   <summary><strong>Fluxo 2: Users e Login (Pessoas Usuárias e Credenciais de acesso)</strong></summary>
- Rotas criadas para validações de login e para gerar token de acesso para que a pessoa usuária possa cadastrar e atualizar partidas. 
+ Rotas criadas para validação de login e autenticação, o sistema gera token de acesso para que a pessoa usuária possa cadastrar e atualizar partidas. 
 </details>
 <details>
   <summary><strong>Fluxo 3: Matches (Partidas)</strong></summary>
