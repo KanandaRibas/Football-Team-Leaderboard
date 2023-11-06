@@ -46,7 +46,7 @@ cd Football-Team-Leaderboard
 npm install && npm run install:apps
 ```
 
-5. Execute o projeto com o docker-compose:
+4. Execute o projeto com o docker-compose:
 ```bash
 npm run compose:up
 ```
@@ -55,7 +55,7 @@ npm run compose:up
 Os containers app_backend, app_frontend e db devem ficar sinalizados como (healthy) na coluna STATUS.<br/>
  Antes de iniciar o mysql verifique se a porta 3306 está livre, ou altere a porta na configuração do docker no arquivo `docker-compose.yml`.
 
-6. Exiba a aplicação no seu navegador:<br/>
+5. Exiba a aplicação no seu navegador:<br/>
 http://localhost:3000
 
 - Caso queira acompanhar os logs de um serviço em tempo real pelo terminal, basta executar `npm run logs [nome_do_servico]` onde _nome_do_servico_ é opcional e pode receber os serviços _backend_, _frontend_ ou _db_.
